@@ -26,6 +26,7 @@ export default function Artisan() {
       <div className="wrap grid gap-14 lg:grid-cols-12 lg:gap-12">
         {/* Portrait */}
         <div className="lg:col-span-5">
+          <div data-reveal className="section-tag mx-auto mb-8 max-w-[420px] text-brand-text lg:mx-0">(03) — L'artisan</div>
           <figure data-reveal className="relative mx-auto max-w-[420px] pb-3 pr-3 lg:mx-0">
             <div className="absolute bottom-0 right-0 h-[calc(100%-12px)] w-[calc(100%-12px)] bg-ink" />
             <div className="relative overflow-hidden border-2 border-ink bg-ink">
@@ -47,8 +48,7 @@ export default function Artisan() {
         </div>
 
         {/* Texte */}
-        <div className="flex flex-col lg:col-span-7 lg:pt-4">
-          <div data-reveal className="section-tag text-brand-text">(02) — L'artisan</div>
+        <div className="flex flex-col lg:col-span-7 lg:pt-14">
           <blockquote data-reveal className="relative mt-8" style={{ "--d": "80ms" }}>
             <span
               aria-hidden="true"

@@ -44,17 +44,18 @@ export const config = {
   heroLieu: "Troyes et alentours (10)",
   adressePostale: "15 rue Marco Polo, 10120 Saint-André-les-Vergers",
   siren: "849 625 454",
-  // Noms abrégés façon carte et ordre choisi pour que les libellés du
-  // radar ne se chevauchent pas (positions calculées d'après l'index).
+  // Positions placées à la main sur la carte radar (repère 500 × 500,
+  // centre 250/250) : direction proche de la réalité autour de Troyes, noms
+  // entiers qui restent à l'intérieur du cercle sans se chevaucher.
   communes: [
-    "Bréviandes",
-    "Rosières",
-    "Pont-Ste-Marie",
-    "St-André-les-Vergers",
-    "La Chapelle-St-Luc",
-    "St-Julien-les-Villas",
-    "Sainte-Savine",
-    "St-Parres-aux-Tertres",
+    { nom: "Pont-Sainte-Marie", x: 338, y: 141, pos: "bottom" },
+    { nom: "Saint-Parres-aux-Tertres", x: 357, y: 215, pos: "top" },
+    { nom: "Saint-Julien-les-Villas", x: 331, y: 349, pos: "top" },
+    { nom: "Bréviandes", x: 302, y: 393, pos: "top" },
+    { nom: "Rosières-près-Troyes", x: 255, y: 406, pos: "bottom" },
+    { nom: "Saint-André-les-Vergers", x: 164, y: 360, pos: "top" },
+    { nom: "Sainte-Savine", x: 110, y: 255, pos: "top" },
+    { nom: "La Chapelle-Saint-Luc", x: 146, y: 156, pos: "bottom" },
   ],
 
   // ========================= HORAIRES =========================
@@ -83,6 +84,10 @@ export const config = {
     { src: chantier2, alt: "Douche à l'italienne et baignoire balnéo habillage bois" },
     { src: chantier5, alt: "Baignoire encastrée dans un habillage pierre" },
   ],
+
+  // ========================= TEXTES =========================
+  realisations_sous_titre:
+    "Un aperçu de projets récents — salles de bain, plomberie et rénovations complètes.",
 
   // ========================= CHIFFRES =========================
   stats: [

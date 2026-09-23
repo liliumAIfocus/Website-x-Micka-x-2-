@@ -47,8 +47,8 @@ export default function App() {
         <Hero onOpenSimulator={openSimulator} />
         <Tapes />
         <Services onOpenSimulator={openSimulator} />
-        <Artisan />
         <Realisations onOpenSimulator={openSimulator} />
+        <Artisan />
         <Methode onOpenSimulator={openSimulator} />
         <Zone />
         <Avis />

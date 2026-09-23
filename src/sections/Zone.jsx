@@ -5,11 +5,17 @@ import { config } from "../config/artisan.js";
    centre, le rayon en km, et les communes desservies placées autour. */
 function RadarMap() {
   const communes = config.communes || [];
-  // Positions déterministes autour du centre (angle réparti + distance variable)
-  const points = communes.map((name, i) => {
+  // Commune = objet { nom, x, y, pos } : position choisie à la main (repère
+  // 500 × 500, centre 250/250, cercle de rayon 210 ; pos = nom au-dessus
+  // "top" ou en dessous "bottom" du point).
+  // Commune = simple texte : position déterministe autour du centre (angle
+  // réparti + distance variable).
+  const points = communes.map((c, i) => {
+    if (typeof c === "object") return { name: c.nom, x: c.x, y: c.y, pos: c.pos || "bottom" };
     const angle = (i / communes.length) * Math.PI * 2 - Math.PI / 2 + 0.35;
     const dist = 95 + ((i * 47) % 3) * 38;
-    return { name, x: 250 + Math.cos(angle) * dist, y: 250 + Math.sin(angle) * dist };
+    const y = 250 + Math.sin(angle) * dist;
+    return { name: c, x: 250 + Math.cos(angle) * dist, y, pos: y > 250 ? "bottom" : "top" };
   });
 
   return (
@@ -46,9 +52,14 @@ function RadarMap() {
           <rect x={p.x - 4} y={p.y - 4} width="8" height="8" fill="rgb(var(--ink-rgb))" />
           <text
             x={p.x}
-            y={p.y + (p.y > 250 ? 22 : -12)}
+            y={p.y + (p.pos === "bottom" ? 22 : -12)}
             textAnchor="middle"
             fill="rgb(var(--ink-rgb) / 0.8)"
+            // Détourage clair : les anneaux et axes ne coupent pas le nom
+            stroke="rgb(var(--paper-rgb))"
+            strokeWidth="4"
+            strokeLinejoin="round"
+            paintOrder="stroke"
             style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: 14, fontWeight: 600 }}
           >
             {p.name}
@@ -70,22 +81,10 @@ function RadarMap() {
 }
 
 const ENGAGEMENTS = [
-  {
-    title: config.assurance,
-    desc: "Tous les travaux sont couverts pendant 10 ans. Attestation fournie avec le devis.",
-  },
-  {
-    title: "Devis gratuit et détaillé",
-    desc: "Chaque poste chiffré, sans ligne floue. Pas de supplément découvert en fin de chantier.",
-  },
-  {
-    title: "Chantier protégé, laissé propre",
-    desc: "Bâches, protections de sol, nettoyage chaque soir. Vous retrouvez votre logement comme avant — en mieux.",
-  },
-  {
-    title: `Artisan local, à ${config.rayonKm} km max`,
-    desc: `Basé à ${config.ville}, j'interviens vite dans tout le secteur de ${config.villeProche}.`,
-  },
+  config.assurance,
+  "Devis gratuit et détaillé",
+  "Chantier protégé, laissé propre",
+  `Artisan local, à ${config.rayonKm} km max`,
 ];
 
 export default function Zone() {
@@ -98,20 +97,17 @@ export default function Zone() {
             Des engagements écrits, pas des promesses.
           </h2>
           <ul className="mt-10 border-t-2 border-ink">
-            {ENGAGEMENTS.map((e, i) => (
+            {ENGAGEMENTS.map((title, i) => (
               <li
-                key={e.title}
+                key={title}
                 data-reveal
                 style={{ "--d": `${i * 70}ms` }}
-                className="grid grid-cols-[auto_1fr] gap-4 border-b-2 border-ink py-5"
+                className="grid grid-cols-[auto_1fr] items-center gap-4 border-b-2 border-ink py-5"
               >
-                <span className="mt-0.5 grid h-7 w-7 place-items-center bg-ink text-paper">
+                <span className="grid h-7 w-7 place-items-center bg-ink text-paper">
                   <Check size={16} strokeWidth={3} />
                 </span>
-                <div>
-                  <h3 className="font-display text-xl font-bold leading-tight">{e.title}</h3>
-                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink/65">{e.desc}</p>
-                </div>
+                <h3 className="font-display text-xl font-bold leading-tight">{title}</h3>
               </li>
             ))}
           </ul>

@@ -51,15 +51,15 @@ export default function Realisations({ onOpenSimulator }) {
       <div className="wrap lg:pt-[calc(var(--header-h)+2.5rem)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div data-reveal className="section-tag text-brand-bright">(03) — Réalisations</div>
+            <div data-reveal className="section-tag text-brand-bright">(02) — Réalisations</div>
             <h2 data-reveal className="h-section mt-5" style={{ "--d": "80ms" }}>
               Le travail, <span className="text-brand-bright">sur pièce.</span>
             </h2>
           </div>
           <div data-reveal className="flex items-end gap-6" style={{ "--d": "160ms" }}>
             <p className="max-w-xs text-paper/65">
-              Salles de bain, douches, réseaux : quelques chantiers récents, livrés
-              propres.
+              {config.realisations_sous_titre ||
+                "Salles de bain, douches, réseaux : quelques chantiers récents, livrés propres."}
             </p>
             <div className="hidden font-mono text-sm tabular-nums text-paper/70 lg:block">
               <span className="text-2xl font-semibold text-paper">{String(current).padStart(2, "0")}</span>
@@ -79,9 +79,7 @@ export default function Realisations({ onOpenSimulator }) {
           {CHANTIERS.map((c, i) => (
             <figure key={c.src} className="group w-[78vw] shrink-0 snap-start sm:w-[46vw] lg:w-auto">
               <div
-                className={`relative overflow-hidden border-2 border-paper/15 bg-ink-2 ${
-                  i % 3 === 1 ? "aspect-square" : "aspect-[4/5]"
-                } lg:h-[calc(100vh-var(--header-h)-24rem)] lg:min-h-[300px]`}
+                className="relative aspect-[3/4] overflow-hidden border-2 border-paper/15 bg-ink-2 lg:h-[calc(100vh-var(--header-h)-24rem)] lg:min-h-[300px]"
               >
                 <img
                   src={c.src}
