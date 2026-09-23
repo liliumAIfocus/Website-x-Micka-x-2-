@@ -74,6 +74,9 @@ export const config = {
 
   // ========================= PHOTOS =========================
   hero: chantier1,
+  // Mobile : la photo est affichée en format plus large que haut sous le
+  // titre ; on garde le haut de la pièce (douche, miroir, meuble).
+  heroPositionMobile: "center 25%",
   heroLegende: "Salle de bain rénovée : douche à l'italienne, meuble vasque suspendu noir mat et colonne",
   portrait: portraitArtisan,
   portraitPosition: "center 22%",

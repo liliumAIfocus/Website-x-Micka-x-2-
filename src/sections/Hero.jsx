@@ -3,10 +3,14 @@ import { config } from "../config/artisan.js";
 import { useMediaQuery } from "../lib/hooks.js";
 
 /* Badge circulaire qui tourne : texte sur un cercle + icône au centre */
-function RotatingBadge({ className = "" }) {
+function RotatingBadge({ small = false, className = "" }) {
   const text = "Devis gratuit ✱ Garantie décennale ✱ ";
   return (
-    <div className={`pointer-events-none grid h-32 w-32 place-items-center sm:h-36 sm:w-36 ${className}`}>
+    <div
+      className={`pointer-events-none grid place-items-center ${
+        small ? "h-24 w-24" : "h-32 w-32 sm:h-36 sm:w-36"
+      } ${className}`}
+    >
       <svg viewBox="0 0 200 200" className="spin-slow absolute h-full w-full">
         <circle cx="100" cy="100" r="98" fill="rgb(var(--paper-rgb))" stroke="rgb(var(--ink-rgb))" strokeWidth="3" />
         <defs>
@@ -19,10 +23,44 @@ function RotatingBadge({ className = "" }) {
           <textPath href="#badge-circle">{text}</textPath>
         </text>
       </svg>
-      <span className="relative grid h-12 w-12 place-items-center bg-brand text-brand-on sm:h-14 sm:w-14">
-        <ShieldCheck size={26} strokeWidth={2.2} />
+      <span
+        className={`relative grid place-items-center bg-brand text-brand-on ${
+          small ? "h-9 w-9" : "h-12 w-12 sm:h-14 sm:w-14"
+        }`}
+      >
+        <ShieldCheck size={small ? 19 : 26} strokeWidth={2.2} />
       </span>
     </div>
+  );
+}
+
+/* Photo (ou vidéo) du hero, qui remplit son cadre */
+function HeroMedia({ video, position }) {
+  if (video) {
+    return (
+      <video
+        key={video}
+        className="h-full w-full object-cover"
+        style={{ objectPosition: position }}
+        src={video}
+        poster={config.hero}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+      />
+    );
+  }
+  return (
+    <img
+      src={config.hero}
+      alt={config.heroLegende || `Chantier ${config.nomEntreprise}`}
+      className="h-full w-full object-cover"
+      style={{ objectPosition: position }}
+      fetchPriority="high"
+    />
   );
 }
 
@@ -34,6 +72,9 @@ const FACTS = [
 
 export default function Hero({ onOpenSimulator }) {
   const isMobile = useMediaQuery("(max-width: 767px)");
+  // Ordinateur : photo dans la colonne de droite. Mobile / tablette : photo
+  // glissée sous le titre, pour qu'elle soit visible dès l'arrivée.
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const heroVideo = isMobile
     ? config.heroVideoMobile || config.heroVideoDesktop
     : config.heroVideoDesktop || config.heroVideoMobile;
@@ -59,6 +100,25 @@ export default function Hero({ onOpenSimulator }) {
               </span>
             </span>
           </h1>
+
+          {!isDesktop && (
+            <div className="relative mt-7 pb-3 pr-3 sm:max-w-[560px]">
+              <div
+                className="wipe-in absolute bottom-0 right-0 h-[calc(100%-12px)] w-[calc(100%-12px)] bg-brand"
+                style={{ "--d": "400ms" }}
+              />
+              <figure
+                className="wipe-in relative aspect-[5/4] overflow-hidden border-2 border-ink bg-ink"
+                style={{ "--d": "250ms" }}
+              >
+                <HeroMedia video={heroVideo} position={config.heroPositionMobile} />
+                <figcaption className="label absolute left-0 top-0 bg-paper px-2.5 py-1.5 text-ink">
+                  Fig. 01
+                </figcaption>
+              </figure>
+              <RotatingBadge small className="fade-up absolute -right-1 top-6" />
+            </div>
+          )}
 
           <p
             className="fade-up mt-7 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl"
@@ -117,45 +177,27 @@ export default function Hero({ onOpenSimulator }) {
           </dl>
         </div>
 
-        {/* Colonne image */}
-        <div className="relative lg:col-span-5">
-          <div className="relative mx-auto w-full max-w-[460px] pb-3 pr-3 sm:max-w-[520px] lg:ml-auto lg:mr-0 lg:max-w-none">
-            {/* Bloc de couleur décalé (ombre dure) */}
-            <div className="wipe-in absolute bottom-0 right-0 h-[calc(100%-12px)] w-[calc(100%-12px)] bg-brand" style={{ "--d": "250ms" }} />
-            <figure className="wipe-in relative border-2 border-ink bg-ink" style={{ "--d": "100ms" }}>
-              <div className="aspect-[4/5] overflow-hidden lg:aspect-[4/5.2]">
-                {heroVideo ? (
-                  <video
-                    key={heroVideo}
-                    className="h-full w-full object-cover"
-                    src={heroVideo}
-                    poster={config.hero}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <img
-                    src={config.hero}
-                    alt={config.heroLegende || `Chantier ${config.nomEntreprise}`}
-                    className="h-full w-full object-cover"
-                    fetchPriority="high"
-                  />
+        {/* Colonne image (ordinateur) */}
+        {isDesktop && (
+          <div className="relative lg:col-span-5">
+            <div className="relative ml-auto w-full pb-3 pr-3">
+              {/* Bloc de couleur décalé (ombre dure) */}
+              <div className="wipe-in absolute bottom-0 right-0 h-[calc(100%-12px)] w-[calc(100%-12px)] bg-brand" style={{ "--d": "250ms" }} />
+              <figure className="wipe-in relative border-2 border-ink bg-ink" style={{ "--d": "100ms" }}>
+                <div className="aspect-[4/5.2] overflow-hidden">
+                  <HeroMedia video={heroVideo} />
+                </div>
+                {config.heroLegende && (
+                  <figcaption className="flex items-start gap-4 border-t-2 border-ink bg-paper px-4 py-3">
+                    <span className="label shrink-0 pt-0.5 text-brand-text">Fig. 01</span>
+                    <span className="text-sm leading-snug text-ink/75">{config.heroLegende}</span>
+                  </figcaption>
                 )}
-              </div>
-              {config.heroLegende && (
-                <figcaption className="flex items-start gap-4 border-t-2 border-ink bg-paper px-4 py-3">
-                  <span className="label shrink-0 pt-0.5 text-brand-text">Fig. 01</span>
-                  <span className="text-sm leading-snug text-ink/75">{config.heroLegende}</span>
-                </figcaption>
-              )}
-            </figure>
-            <RotatingBadge className="fade-up absolute -left-4 top-8 sm:-left-12 lg:-left-16 lg:top-auto lg:bottom-28" />
+              </figure>
+              <RotatingBadge className="fade-up absolute -left-16 bottom-28" />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
