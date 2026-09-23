@@ -6,6 +6,10 @@ import { useSwipe } from "../lib/hooks.js";
 
 const REVIEWS = config.avis;
 const DURATION = 7000;
+// "25+" (palier) → "plus de 25 avis" ; 24 → "24 avis"
+const NB_AVIS = String(config.nbAvis).endsWith("+")
+  ? `plus de ${parseInt(config.nbAvis, 10)} avis`
+  : `${config.nbAvis} avis`;
 
 /* Avis : un seul avis à la fois, en très grand, qui défile automatiquement
    (barre de progression) — flèches, puces et glisser sur mobile. */
@@ -42,7 +46,7 @@ export default function Avis() {
               <div className="h-display text-[6.5rem] leading-none">{config.noteGoogle}</div>
               <Stars size={22} className="mt-3 text-brand" />
               <p className="mt-3 text-ink/65">
-                Note moyenne sur <strong className="text-ink">{config.nbAvis} avis</strong>
+                Note moyenne sur <strong className="text-ink">{NB_AVIS}</strong>
               </p>
             </div>
             {config.lienAvisGoogle && (

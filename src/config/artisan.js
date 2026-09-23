@@ -92,7 +92,9 @@ export const config = {
   // ========================= AVIS (avis Google de MG Works) =====
   noteGoogle: "5,0",
   noteSurCinq: "5/5",
-  nbAvis: 11,
+  // Palier plutôt que le nombre exact (27 en sept. 2026) : reste vrai quand
+  // de nouveaux avis arrivent, pas besoin de mettre à jour.
+  nbAvis: "25+",
   avis: [
     {
       name: "Vanessa B.",
