@@ -40,6 +40,8 @@ export const config = {
   villeProche: "Troyes",
   rayonKm: 20,
   zoneIntervention: "Troyes et son agglomération",
+  // Lieu affiché en haut du hero (sinon « ville (code postal) »)
+  heroLieu: "Troyes et alentours (10)",
   adressePostale: "15 rue Marco Polo, 10120 Saint-André-les-Vergers",
   siren: "849 625 454",
   // Noms abrégés façon carte et ordre choisi pour que les libellés du

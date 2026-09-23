@@ -46,7 +46,7 @@ export default function Hero({ onOpenSimulator }) {
         <div className="flex flex-col lg:col-span-7">
           <div className="fade-up label flex items-center gap-2.5 text-ink/70">
             <span className="h-2.5 w-2.5 bg-brand" />
-            {metier} — {config.ville} ({config.codePostal})
+            {metier} — {config.heroLieu || `${config.ville} (${config.codePostal})`}
           </div>
 
           <h1 className="h-display mt-6 text-[3.15rem] sm:text-[4.6rem] lg:text-[5.3rem] xl:text-[6.3rem]">
