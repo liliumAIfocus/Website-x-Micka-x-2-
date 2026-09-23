@@ -45,17 +45,20 @@ export const config = {
   adressePostale: "15 rue Marco Polo, 10120 Saint-André-les-Vergers",
   siren: "849 625 454",
   // Positions placées à la main sur la carte radar (repère 500 × 500,
-  // centre 250/250) : direction proche de la réalité autour de Troyes, noms
-  // entiers qui restent à l'intérieur du cercle sans se chevaucher.
+  // centre 250/250, 210 = 20 km) : direction réelle depuis Troyes. Les
+  // communes lointaines sont à l'échelle (Estissac ~20 km, Lusigny ~16 km,
+  // Charmont ~15 km, Bouilly ~13 km, un peu rentrées pour que le nom tienne
+  // dans le cercle) ; celles de l'agglomération sont écartées du centre pour
+  // ne pas chevaucher « Troyes ».
   communes: [
-    { nom: "Pont-Sainte-Marie", x: 338, y: 141, pos: "bottom" },
-    { nom: "Saint-Parres-aux-Tertres", x: 357, y: 215, pos: "top" },
-    { nom: "Saint-Julien-les-Villas", x: 331, y: 349, pos: "top" },
-    { nom: "Bréviandes", x: 302, y: 393, pos: "top" },
-    { nom: "Rosières-près-Troyes", x: 255, y: 406, pos: "bottom" },
-    { nom: "Saint-André-les-Vergers", x: 164, y: 360, pos: "top" },
-    { nom: "Sainte-Savine", x: 110, y: 255, pos: "top" },
-    { nom: "La Chapelle-Saint-Luc", x: 146, y: 156, pos: "bottom" },
+    { nom: "Charmont-sous-Barbuise", x: 330, y: 111, pos: "bottom" },
+    { nom: "Pont-Sainte-Marie", x: 286, y: 179, pos: "top" },
+    { nom: "Lusigny-sur-Barse", x: 396, y: 284, pos: "top" },
+    { nom: "Saint-Julien-les-Villas", x: 328, y: 328, pos: "bottom" },
+    { nom: "Bouilly", x: 182, y: 372, pos: "bottom" },
+    { nom: "Saint-André-les-Vergers", x: 136, y: 339, pos: "top" },
+    { nom: "Estissac", x: 75, y: 290, pos: "top" },
+    { nom: "La Chapelle-Saint-Luc", x: 175, y: 192, pos: "bottom" },
   ],
 
   // ========================= HORAIRES =========================
