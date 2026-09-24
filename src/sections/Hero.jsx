@@ -121,14 +121,14 @@ export default function Hero({ onOpenSimulator }) {
           )}
 
           <p
-            className="fade-up mt-7 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl"
+            className="fade-up order-2 mt-7 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl lg:order-none"
             style={{ "--d": "420ms" }}
           >
             {config.hero_sous_titre}
           </p>
 
           <div
-            className="fade-up mt-9 flex flex-col gap-6 sm:flex-row sm:items-center"
+            className="fade-up order-1 mt-9 flex flex-col gap-6 sm:flex-row sm:items-center lg:order-none"
             style={{ "--d": "540ms" }}
           >
             <button type="button" onClick={onOpenSimulator} className="btn-main self-start">
@@ -154,7 +154,7 @@ export default function Hero({ onOpenSimulator }) {
           </div>
 
           <dl
-            className="fade-up mt-12 grid grid-cols-3 border-y-2 border-ink lg:mt-auto"
+            className="fade-up order-3 mt-12 grid grid-cols-3 border-y-2 border-ink lg:order-none lg:mt-auto"
             style={{ "--d": "680ms" }}
           >
             {FACTS.map((f, i) => {
