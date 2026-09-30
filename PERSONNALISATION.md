@@ -51,6 +51,10 @@ Puis ouvrir http://localhost:5174
    - `portrait` : la tête de l'artisan (+ `portraitPosition` pour le cadrage)
    - `chantiers` : jusqu'à 6 photos de réalisations (avec un `alt` descriptif,
      affiché en légende)
+   - `ambiances` : une photo par style (scandinave, méditerranéen, moderne),
+     en deux séries : `sdb` (salles de bain) et `toilettes` (WC, montrées si
+     le client choisit « Toilettes »). Affichées dans le simulateur
+     d'estimation et sur la fiche chantier
    - `heroVideoDesktop` / `heroVideoMobile` : (facultatif) vidéo dans le cadre
      du hero, fichier placé dans `public/` (ex. `"/hero.mp4"`)
 

@@ -116,6 +116,25 @@ function openStatus(horaires, urgence24h) {
   };
 }
 
+/* Jour du rappel promis, d'après les horaires de la config :
+   « aujourd'hui » s'il reste au moins 2 h d'ouverture, sinon le prochain
+   jour ouvert (« demain (jeudi) », « lundi »…). */
+const JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+
+export function prochainRappel(horaires) {
+  const plages = horaires?.plages;
+  if (!plages || !Object.keys(plages).length) return "sous 24 h";
+  const now = new Date();
+  const plage = plages[now.getDay()];
+  const h = now.getHours() + now.getMinutes() / 60;
+  if (plage && h < plage[1] - 2) return "aujourd'hui";
+  for (let d = 1; d <= 7; d++) {
+    const jour = (now.getDay() + d) % 7;
+    if (plages[jour]) return d === 1 ? `demain (${JOURS[jour]})` : JOURS[jour];
+  }
+  return "sous 24 h";
+}
+
 export function useOpenStatus(horaires, urgence24h) {
   const [status, setStatus] = useState(() => openStatus(horaires, urgence24h));
   useEffect(() => {

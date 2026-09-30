@@ -172,6 +172,31 @@ export const demo = {
     { value: 4.7, suffix: "/5", decimals: 1, label: "de moyenne sur les avis Google", icon: "Star" },
   ],
 
+  // (design 2) Photos d'ambiance du simulateur, question « Quel style vous
+  // attire ? » (rénovation salle de bain). La photo du style choisi s'affiche
+  // aussi sur la fiche chantier. Idéalement de vraies réalisations de
+  // l'artisan. `sdb` = photos de salle de bain, `toilettes` = photos de WC
+  // (utilisées si le client a choisi « Toilettes »). Mettre un style à null =
+  // carte sans photo pour ce style.
+  ambiances: {
+    sdb: {
+      scandinave:
+        "https://images.unsplash.com/photo-1643949700215-e61cdca053f7?auto=format&fit=crop&w=800&q=80",
+      mediterraneen:
+        "https://images.unsplash.com/photo-1666735344874-f9f460e6c439?auto=format&fit=crop&w=800&q=80",
+      moderne:
+        "https://images.unsplash.com/photo-1531125227120-bac862d2aeb9?auto=format&fit=crop&w=800&q=80",
+    },
+    toilettes: {
+      scandinave:
+        "https://images.unsplash.com/photo-1782805153002-96e099970a9d?auto=format&fit=crop&w=800&q=80",
+      mediterraneen:
+        "https://images.unsplash.com/photo-1781249144216-143445323087?auto=format&fit=crop&w=800&q=80",
+      moderne:
+        "https://images.unsplash.com/photo-1667549985146-a7ebffc1ba95?auto=format&fit=crop&w=800&q=80",
+    },
+  },
+
   // Réalisations (galerie de chantiers) — photos stock pour la démo
   chantiers: [
     {

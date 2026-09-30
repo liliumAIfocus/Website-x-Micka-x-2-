@@ -2,37 +2,9 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
-import { config } from "../config/artisan.js";
+import { STEPS, HEX } from "../lib/methode.js";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const prenom = config.nomGerant.split(" ")[0];
-
-const STEPS = [
-  {
-    title: "Premier contact",
-    note: "Rappel sous 24 h",
-    desc: `Vous appelez ou remplissez le simulateur. ${prenom} vous rappelle pour comprendre votre besoin et, si c'est urgent, intervient au plus vite.`,
-  },
-  {
-    title: "Visite & diagnostic",
-    note: "Sans engagement",
-    desc: "Sur place, on regarde l'existant ensemble : état des réseaux, contraintes du logement, vos envies. Des conseils clairs, sans jargon.",
-  },
-  {
-    title: "Devis détaillé",
-    note: "Sous quelques jours",
-    desc: "Matériaux, main d'œuvre, planning : tout est écrit noir sur blanc. Le prix annoncé est le prix payé.",
-  },
-  {
-    title: "Chantier & finitions",
-    note: config.assurance,
-    desc: "Logement protégé, chantier nettoyé chaque soir, finitions vérifiées avec vous avant de partir. Les travaux sont couverts par la garantie décennale.",
-  },
-];
-
-/* Hexagone façon écrou/raccord, pour les étapes */
-const HEX = "polygon(25% 4%, 75% 4%, 100% 50%, 75% 96%, 25% 96%, 0 50%)";
 
 /* Méthode : un « tuyau » se remplit au fil du scroll et relie les
    étapes, chaque raccord s'allume au passage. */
