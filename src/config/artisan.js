@@ -67,12 +67,13 @@ export const config = {
   // maintenant » du header : à caler avec Mickaël.
   urgence24h: false,
 
-  // ========================= COULEUR (bleu ciel MG Works) =========================
+  // ========================= COULEUR (bleu azur de la démo 2) =========================
+  // Ancien bleu ciel MG Works : #80C0E3 / #A5D4EE / #C6E5F5 / #5A9CC0
   couleurs: {
-    brand: "#80C0E3",
-    brandLight: "#A5D4EE",
-    brandGlow: "#C6E5F5",
-    brandDeep: "#5A9CC0",
+    brand: "#1E6FE8",
+    brandLight: "#3B82F0",
+    brandGlow: "#BFD8FB",
+    brandDeep: "#1553B8",
   },
 
   // ========================= PHOTOS =========================
