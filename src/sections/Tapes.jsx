@@ -40,6 +40,7 @@ export default function Tapes() {
     `${config.rayonKm} km autour de ${config.villeProche}`,
     `${config.noteSurCinq} sur Google`,
     "Chantier propre",
+    ...(config.marques?.length ? [`Chaudières ${config.marques.join(" & ")}`] : []),
   ];
   return (
     <section aria-label="Prestations et engagements" className="relative h-44 overflow-hidden sm:h-52">

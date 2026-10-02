@@ -1,9 +1,9 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BadgeCheck } from "lucide-react";
 import { config } from "../config/artisan.js";
 import { ICONS } from "../lib/icons.jsx";
 
 /* Prestations en liste d'index numérotée (façon sommaire de catalogue).
-   Chaque ligne ouvre le simulateur de devis. */
+   Chaque ligne ouvre le simulateur de devis directement sur son service. */
 export default function Services({ onOpenSimulator }) {
   return (
     <section id="prestations" className="relative pb-20 pt-10 lg:pb-28 lg:pt-14">
@@ -30,7 +30,7 @@ export default function Services({ onOpenSimulator }) {
               <li key={s.title} data-reveal style={{ "--d": `${i * 60}ms` }}>
                 <button
                   type="button"
-                  onClick={onOpenSimulator}
+                  onClick={() => onOpenSimulator(s.simu)}
                   className="group relative grid w-full grid-cols-[auto_1fr_auto] items-start gap-x-4 gap-y-2 border-b-2 border-ink px-1 py-6 text-left transition-colors duration-300 hover:bg-ink hover:text-paper sm:gap-x-6 sm:px-4 md:grid-cols-[4rem_minmax(0,1.1fr)_minmax(0,1fr)_auto] md:items-center md:py-7"
                 >
                   <span className="label pt-2 text-brand-text transition-colors group-hover:text-brand-bright md:pt-0">
@@ -48,6 +48,19 @@ export default function Services({ onOpenSimulator }) {
                   </span>
                   <span className="col-span-2 col-start-2 row-start-2 text-[15px] leading-relaxed text-ink/65 transition-colors group-hover:text-paper/75 md:col-span-1 md:col-start-3 md:row-start-1">
                     {s.desc}
+                    {/* Détail de la famille de prestations, en étiquettes */}
+                    {s.tags?.length > 0 && (
+                      <span className="mt-3 flex flex-wrap gap-1.5">
+                        {s.tags.map((t) => (
+                          <span
+                            key={t}
+                            className="label border border-current px-2 py-1 text-[10px] leading-none text-ink/70 transition-colors group-hover:text-paper/80"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </span>
+                    )}
                   </span>
                   <span className="col-start-3 row-start-1 grid h-11 w-11 place-items-center border-2 border-current transition-all duration-300 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-brand-on md:col-start-4">
                     <ArrowUpRight size={20} strokeWidth={2.2} />
@@ -58,15 +71,47 @@ export default function Services({ onOpenSimulator }) {
           })}
         </ul>
 
+        {config.marques?.length > 0 && <Marques />}
+
         <div data-reveal className="mt-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
           <p className="label text-ink/55">
             Intervention dans un rayon de {config.rayonKm} km autour de {config.villeProche}
           </p>
-          <button type="button" onClick={onOpenSimulator} className="btn-line">
+          <button type="button" onClick={() => onOpenSimulator()} className="btn-line">
             Décrire mon besoin <ArrowUpRight size={18} />
           </button>
         </div>
       </div>
     </section>
+  );
+}
+
+/* Badge de réassurance : les marques de chaudières installées */
+function Marques() {
+  return (
+    <div
+      data-reveal
+      className="mt-10 flex flex-col gap-4 border-2 border-ink bg-paper-2 p-5 shadow-hard-sm sm:flex-row sm:items-center sm:gap-6 sm:p-6"
+    >
+      <span className="flex items-center gap-3">
+        <span className="grid h-11 w-11 shrink-0 place-items-center bg-brand text-brand-on">
+          <BadgeCheck size={22} strokeWidth={2.2} />
+        </span>
+        <span className="leading-tight">
+          <span className="label block text-[10px] text-ink/55">Marques de confiance</span>
+          <span className="font-display text-lg font-bold">Chaudières installées et entretenues</span>
+        </span>
+      </span>
+      <ul className="flex flex-wrap gap-2 sm:ml-auto sm:gap-3">
+        {config.marques.map((m) => (
+          <li
+            key={m}
+            className="border-2 border-ink bg-paper px-4 py-2 font-display text-xl font-extrabold tracking-tight sm:text-2xl"
+          >
+            {m}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

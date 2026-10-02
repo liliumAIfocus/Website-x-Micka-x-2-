@@ -4,7 +4,8 @@ import { config } from "../config/artisan.js";
 import { useOpenStatus } from "../lib/hooks.js";
 import { StatusDot } from "./Header.jsx";
 
-const BESOINS = ["Dépannage", "Salle de bain", "Chauffage", "Autre"];
+// Mêmes familles que la section Prestations
+const BESOINS = [...config.services.map((s) => s.title), "Autre"];
 
 function Field({ label, name, type = "text", required, placeholder, autoComplete }) {
   return (
@@ -128,7 +129,7 @@ export default function Contact() {
             <div className="mt-7 grid gap-7 sm:grid-cols-2">
               <Field label="Nom" name="name" required autoComplete="name" placeholder="Jean Dupont" />
               <Field label="Téléphone" name="phone" type="tel" required autoComplete="tel" placeholder="06 12 34 56 78" />
-              <Field label="Email" name="email" type="email" autoComplete="email" placeholder="jean@exemple.fr" />
+              <Field label="Ville" name="ville" required autoComplete="address-level2" placeholder={config.villeProche} />
               <Field label="Code postal" name="zip" autoComplete="postal-code" placeholder={config.codePostal} />
             </div>
             <label className="mt-7 block">

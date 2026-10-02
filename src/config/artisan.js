@@ -18,8 +18,8 @@ import chantier1 from "../assets/artisan/chantier1.webp";
 import chantier2 from "../assets/artisan/chantier2.webp";
 import chantier3 from "../assets/artisan/chantier3.webp";
 import chantier4 from "../assets/artisan/chantier4.webp";
-import chantier5 from "../assets/artisan/chantier5.png";
 import chantier6 from "../assets/artisan/chantier6.webp";
+import chantier7 from "../assets/artisan/chantier7.webp";
 
 export const config = {
   // On part de la démo, et on écrase seulement ce qui change.
@@ -89,12 +89,50 @@ export const config = {
     { src: chantier3, alt: "Meuble vasque noir, miroir rond rétroéclairé et robinetterie dorée" },
     { src: chantier4, alt: "Cabine de douche noire, vasque dorée et carrelage marbré" },
     { src: chantier2, alt: "Douche à l'italienne et baignoire balnéo habillage bois" },
-    { src: chantier5, alt: "Baignoire encastrée dans un habillage pierre" },
+    // (chantier5 retiré : photo trop petite, 480 × 640)
+    { src: chantier7, alt: "Chauffe-eau Atlantic posé au mur, raccordements cuivre soignés" },
   ],
+
+  // ========================= PRESTATIONS =========================
+  // 4 familles (même découpage que le simulateur). `simu` : le service
+  // ouvert directement dans le simulateur au clic sur la ligne.
+  services: [
+    {
+      icon: "Droplets",
+      title: "Plomberie",
+      simu: "plomberie",
+      desc: "Installation, rénovation et dépannage : sanitaires, canalisations, robinetterie et débouchage.",
+      tags: ["Fuites & débouchage", "Sanitaires & robinetterie", "Adoucisseur d'eau"],
+    },
+    {
+      icon: "Flame",
+      title: "Chauffage & énergie",
+      simu: "chauffage",
+      desc: "Chaudière gaz ou fioul, chauffe-eau et radiateurs électriques : installation, entretien et remplacement.",
+      tags: ["Chaudières", "Chauffe-eau", "Radiateurs électriques", "Entretien annuel"],
+    },
+    {
+      icon: "Bath",
+      title: "Salle de bain",
+      simu: "sdb",
+      desc: "Projet clé en main réalisé suivant vos goûts, de la dépose aux finitions.",
+      tags: ["Douche à l'italienne", "Carrelage & faïence", "Toilettes"],
+    },
+    {
+      icon: "ShieldCheck",
+      title: "Mise aux normes",
+      simu: "normes",
+      desc: "Électricité, gaz, ventilation : un logement sûr, conforme et assurable.",
+      tags: ["Tableau électrique", "Conformité gaz", "VMC"],
+    },
+  ],
+
+  // Marques de chaudières mises en avant (badge de réassurance)
+  marques: ["Frisquet", "Saunier Duval"],
 
   // ========================= TEXTES =========================
   realisations_sous_titre:
-    "Un aperçu de projets récents — salles de bain, plomberie et rénovations complètes.",
+    "Un aperçu de projets récents : salles de bain, plomberie et chauffe-eau.",
 
   // ========================= CHIFFRES =========================
   stats: [

@@ -19,7 +19,13 @@ import { scrollToHash } from "./lib/scroll.js";
 
 export default function App() {
   const [simulatorOpen, setSimulatorOpen] = useState(false);
-  const openSimulator = () => setSimulatorOpen(true);
+  // Service à ouvrir directement (clic sur une prestation), sinon l'étape 1.
+  // Un clic de bouton passe un événement : on ne garde que les noms de service.
+  const [simulatorService, setSimulatorService] = useState(null);
+  const openSimulator = (service) => {
+    setSimulatorService(typeof service === "string" ? service : null);
+    setSimulatorOpen(true);
+  };
 
   useReveal();
 
@@ -56,7 +62,7 @@ export default function App() {
       </main>
       <Footer />
       <MobileBar onOpenSimulator={openSimulator} hidden={simulatorOpen} />
-      <Simulator open={simulatorOpen} onClose={() => setSimulatorOpen(false)} />
+      <Simulator open={simulatorOpen} initialService={simulatorService} onClose={() => setSimulatorOpen(false)} />
     </div>
   );
 }

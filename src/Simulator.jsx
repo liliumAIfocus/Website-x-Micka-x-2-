@@ -7,7 +7,8 @@ import {
   Bath,
   Droplets,
   Flame,
-  Zap,
+  ShieldCheck,
+  BadgeCheck,
   Check,
   Loader2,
   Phone,
@@ -26,18 +27,102 @@ const NO_QUESTIONS = [];
 const AMBIANCES = config.ambiances || {};
 
 /* ---------- Services (étape 0) ---------- */
+// Les 4 familles de prestations (mêmes noms que la section Prestations).
+// Pas de « Dépannage urgent » : en cas d'urgence, le client appelle
+// directement (bouton Appeler, fiche Google).
 // `avisMots` : mots-clés pour retrouver l'avis client le plus proche du service
 const SERVICES = [
-  { value: "sdb", label: "Rénovation salle de bain", hint: "Transformation complète de votre espace", icon: Bath, avisMots: ["salle de bain", "rénovation"] },
-  { value: "sanitaire", label: "Sanitaire & plomberie", hint: "Installation et réparation", icon: Droplets, avisMots: ["plomberie", "fuite", "sanitaire", "débouchage"] },
-  { value: "chauffage", label: "Chauffage", hint: "Installation et entretien", icon: Flame, avisMots: ["chaudière", "chauffage"] },
-  { value: "urgence", label: "Dépannage urgent", hint: "Fuite, panne : intervention rapide", icon: Zap, urgent: true },
+  { value: "plomberie", label: "Plomberie", hint: "Fuite, sanitaires, chauffe-eau", icon: Droplets, avisMots: ["plomberie", "fuite", "sanitaire", "débouchage"] },
+  { value: "chauffage", label: "Chauffage & énergie", hint: "Chaudière, chauffe-eau, radiateurs", icon: Flame, avisMots: ["chaudière", "chauffage", "chauffe-eau"] },
+  { value: "sdb", label: "Salle de bain", hint: "Création ou rénovation complète", icon: Bath, avisMots: ["salle de bain", "rénovation"] },
+  { value: "normes", label: "Mise aux normes", hint: "Électricité, gaz, ventilation", icon: ShieldCheck, avisMots: ["normes", "électri"] },
 ];
 
 /* ---------- Questions par service ---------- */
 // `short` : intitulé court sur la fiche chantier. `recap` : valeur affichée sur
 // la fiche si différente du libellé. `skip` : question sautée selon les réponses.
+
+// Type de chauffe-eau : posée seulement si le client a choisi « Chauffe-eau »
+// (dans Plomberie ou dans Chauffage & énergie).
+const typeChauffeEau = (skip) => ({
+  key: "chauffeEau",
+  short: "Chauffe-eau",
+  skip,
+  title: "Quel type de chauffe-eau ?",
+  subtitle: "Pas sûr ? Choisissez « Je ne sais pas » — on regardera ensemble.",
+  options: [
+    { value: "electrique", label: "Électrique", hint: "Ballon classique, le plus courant" },
+    { value: "thermo", label: "Thermodynamique", hint: "Consomme beaucoup moins d'électricité" },
+    { value: "extraplat", label: "Extra-plat", hint: "Gain de place : couloir, placard" },
+    { value: "nsp", label: "Je ne sais pas", hint: "On vous conseille au téléphone", recap: "À définir" },
+  ],
+});
+
 const FLOWS = {
+  plomberie: [
+    {
+      key: "travaux",
+      short: "Besoin",
+      title: "Quel est votre besoin ?",
+      subtitle: "On précisera juste après.",
+      options: [
+        { value: "fuite", label: "Fuite / débouchage", hint: "Fuite, canalisation bouchée" },
+        { value: "sanitaire", label: "WC & robinetterie", hint: "Toilettes, douche, robinet" },
+        { value: "chauffeeau", label: "Chauffe-eau", hint: "Panne, remplacement, installation" },
+        { value: "installation", label: "Installation / rénovation", hint: "Neuf ou extension" },
+      ],
+    },
+    typeChauffeEau((answers) => answers.travaux !== "chauffeeau"),
+    {
+      key: "nature",
+      short: "Nature",
+      title: "De quoi s'agit-il ?",
+      subtitle: "Pour cadrer au mieux l'intervention.",
+      options: [
+        { value: "reparation", label: "Une réparation", recap: "Réparation" },
+        { value: "remplacement", label: "Un remplacement", recap: "Remplacement" },
+        { value: "neuf", label: "Une installation neuve", recap: "Installation neuve" },
+      ],
+    },
+    {
+      key: "delai",
+      short: "Délai",
+      title: "Pour quand ?",
+      subtitle: "Une urgence ? Le plus rapide reste d'appeler directement.",
+      options: [
+        { value: "rapide", label: "Rapidement", hint: "Dans les prochains jours" },
+        { value: "mois", label: "Dans le mois" },
+        { value: "flexible", label: "Flexible", hint: "Quand vous pouvez" },
+      ],
+    },
+  ],
+  chauffage: [
+    {
+      key: "typeChauffage",
+      short: "Équipement",
+      title: "Quel équipement est concerné ?",
+      subtitle: "Si vous hésitez, choisissez « Autre » — on en parlera au téléphone.",
+      options: [
+        { value: "chaudiere", label: "Chaudière gaz ou fioul", hint: "Frisquet, Saunier Duval…", recap: "Chaudière" },
+        { value: "chauffeeau", label: "Chauffe-eau", hint: "Électrique, thermodynamique, extra-plat" },
+        { value: "electrique", label: "Radiateurs électriques" },
+        { value: "autre", label: "Autre / je ne sais pas", recap: "À préciser" },
+      ],
+    },
+    typeChauffeEau((answers) => answers.typeChauffage !== "chauffeeau"),
+    {
+      key: "intervention",
+      short: "Intervention",
+      title: "Quel type d'intervention ?",
+      subtitle: "On adapte le devis à ce dont vous avez besoin.",
+      options: [
+        { value: "nouvelle", label: "Nouvelle installation" },
+        { value: "remplacement", label: "Remplacement", hint: "Changer un appareil existant" },
+        { value: "entretien", label: "Entretien annuel" },
+        { value: "panne", label: "Panne / réparation" },
+      ],
+    },
+  ],
   sdb: [
     {
       key: "type",
@@ -77,82 +162,44 @@ const FLOWS = {
         { value: "autre", label: "Autre / j'hésite", hint: "On en parle ensemble au rendez-vous", recap: "À définir ensemble" },
       ],
     },
+  ],
+  normes: [
     {
-      key: "budget",
-      short: "Budget",
-      title: "Quel budget envisagez-vous ?",
-      subtitle: "Sans engagement — ça aide juste à cadrer les propositions.",
+      key: "domaine",
+      short: "Domaine",
+      title: "Qu'est-ce qui doit être mis aux normes ?",
+      subtitle: "Si vous ne savez pas, on fait le point ensemble.",
       options: [
-        { value: "b1", label: "500 € — 5 000 €" },
-        { value: "b2", label: "5 000 € — 10 000 €" },
-        { value: "b3", label: "10 000 € — 15 000 €" },
-        { value: "b4", label: "Je ne sais pas encore", recap: "À définir" },
+        { value: "electricite", label: "Électricité", hint: "Tableau, prises, circuits" },
+        { value: "gaz", label: "Gaz", hint: "Installation et raccordements" },
+        { value: "ventilation", label: "Ventilation / VMC", hint: "Aération du logement" },
+        { value: "diagnostic", label: "Je ne sais pas", hint: "Un diagnostic sur place", recap: "Diagnostic à faire" },
+      ],
+    },
+    {
+      key: "contexte",
+      short: "Contexte",
+      title: "Dans quel cadre ?",
+      subtitle: "Pour savoir ce qui est attendu exactement.",
+      options: [
+        { value: "vente", label: "Vente ou location", hint: "Suite à un diagnostic immobilier", recap: "Vente / location" },
+        { value: "achat", label: "Achat ou rénovation", hint: "Logement ancien à remettre à niveau", recap: "Achat / rénovation" },
+        { value: "assurance", label: "Demande de l'assurance", recap: "Assurance" },
+        { value: "securite", label: "Pour ma sécurité", hint: "Installation vieillissante", recap: "Sécurité" },
+      ],
+    },
+    {
+      key: "logement",
+      short: "Logement",
+      title: "Quel type de logement ?",
+      subtitle: "On prévoit l'intervention en conséquence.",
+      options: [
+        { value: "maison", label: "Maison" },
+        { value: "appartement", label: "Appartement" },
+        { value: "local", label: "Local professionnel", recap: "Local pro" },
       ],
     },
   ],
-  sanitaire: [
-    {
-      key: "travaux",
-      short: "Besoin",
-      title: "Quel est votre besoin ?",
-      subtitle: "On précisera juste après.",
-      options: [
-        { value: "fuite", label: "Fuite / débouchage", hint: "Fuite, canalisation bouchée" },
-        { value: "sanitaire", label: "WC & robinetterie", hint: "Toilettes, douche, robinet" },
-        { value: "chauffeeau", label: "Chauffe-eau", hint: "Panne, remplacement" },
-        { value: "installation", label: "Installation / rénovation", hint: "Neuf ou extension" },
-      ],
-    },
-    {
-      key: "nature",
-      short: "Nature",
-      title: "De quoi s'agit-il ?",
-      subtitle: "Pour cadrer au mieux l'intervention.",
-      options: [
-        { value: "reparation", label: "Une réparation", recap: "Réparation" },
-        { value: "remplacement", label: "Un remplacement", recap: "Remplacement" },
-        { value: "neuf", label: "Une installation neuve", recap: "Installation neuve" },
-      ],
-    },
-    {
-      key: "urgence",
-      short: "Délai",
-      title: "Quel est le niveau d'urgence ?",
-      subtitle: "On adapte la priorité du rappel en conséquence.",
-      options: [
-        { value: "urgent", label: "Urgent", hint: "Dans les 24 h", recap: "Urgent (24 h)" },
-        { value: "semaine", label: "Cette semaine" },
-        { value: "flexible", label: "Flexible", hint: "Quand vous pouvez" },
-      ],
-    },
-  ],
-  chauffage: [
-    {
-      key: "typeChauffage",
-      short: "Chauffage",
-      title: "Quel type de chauffage ?",
-      subtitle: "Si vous hésitez, choisissez « Autre » — on en parlera au téléphone.",
-      options: [
-        { value: "gaz", label: "Chaudière gaz" },
-        { value: "fioul", label: "Chaudière fioul" },
-        { value: "electrique", label: "Radiateurs électriques" },
-        { value: "autre", label: "Autre / je ne sais pas", recap: "À préciser" },
-      ],
-    },
-    {
-      key: "intervention",
-      short: "Intervention",
-      title: "Quel type d'intervention ?",
-      subtitle: "On adapte le devis à ce dont vous avez besoin.",
-      options: [
-        { value: "nouvelle", label: "Nouvelle installation" },
-        { value: "remplacement", label: "Remplacement du système", recap: "Remplacement" },
-        { value: "entretien", label: "Entretien annuel" },
-        { value: "panne", label: "Panne / réparation" },
-      ],
-    },
-  ],
-  urgence: [], // pas de questions — écran d'appel direct
 };
 
 /* Numéro de dossier façon bon d'intervention : AAMM-JJ-xx */
@@ -180,11 +227,11 @@ const optionsOf = (q, answers) =>
   q.photos ? q.options.map((o) => ({ ...o, photo: galerie(answers)[o.value] })) : q.options;
 
 /* ---------- Composant ---------- */
-export default function Simulator({ open, onClose }) {
+export default function Simulator({ open, initialService, onClose }) {
   const [step, setStep] = useState(0);
   const [service, setService] = useState(null);
   const [answers, setAnswers] = useState({});
-  const [lead, setLead] = useState({ name: "", phone: "", email: "" });
+  const [lead, setLead] = useState({ name: "", phone: "", ville: "" });
   const [status, setStatus] = useState("idle");
   const [flash, setFlash] = useState(null); // option qui clignote au choix
   const [dir, setDir] = useState(1); // sens de la transition : 1 = suivant, -1 = retour
@@ -196,12 +243,11 @@ export default function Simulator({ open, onClose }) {
     () => (service ? flowOf(service, answers) : NO_QUESTIONS),
     [service, answers]
   );
-  const totalSteps = service === "urgence" ? 2 : 1 + questions.length + 1;
+  const totalSteps = 1 + questions.length + 1;
 
   const kind = useMemo(() => {
     if (status === "sent") return "sent";
     if (step === 0) return "service";
-    if (service === "urgence") return "urgence";
     if (step <= questions.length) return "question";
     return "form";
   }, [step, service, questions.length, status]);
@@ -213,15 +259,13 @@ export default function Simulator({ open, onClose }) {
   const headerNote =
     kind === "sent"
       ? "Demande envoyée"
-      : kind === "urgence"
-        ? "Urgence"
-        : kind === "form"
-          ? "Dernière étape"
-          : kind === "service"
-            ? "2 à 4 questions · 30 secondes"
-            : remaining === 1
-              ? "Dernière question"
-              : `Plus que ${remaining} questions`;
+      : kind === "form"
+        ? "Dernière étape"
+        : kind === "service"
+          ? "2 à 4 questions · 30 secondes"
+          : remaining === 1
+            ? "Dernière question"
+            : `Plus que ${remaining} questions`;
 
   // La fiche chantier accompagne les questions et l'étape coordonnées
   const withFiche = kind === "question" || kind === "form";
@@ -238,12 +282,23 @@ export default function Simulator({ open, onClose }) {
       setStep(0);
       setService(null);
       setAnswers({});
-      setLead({ name: "", phone: "", email: "" });
+      setLead({ name: "", phone: "", ville: "" });
       setStatus("idle");
       setDir(1);
     }, 400);
     return () => clearTimeout(t);
   }, [open]);
+
+  // Ouverture depuis une prestation : on saute le choix du service
+  useEffect(() => {
+    if (!open || !SERVICES.some((s) => s.value === initialService)) return;
+    setService(initialService);
+    setAnswers({});
+    setDossier(numeroDossier());
+    setStatus("idle");
+    setDir(1);
+    setStep(1);
+  }, [open, initialService]);
 
   useEffect(() => {
     if (!open) return;
@@ -326,11 +381,10 @@ export default function Simulator({ open, onClose }) {
   const submitLead = (e) => {
     e.preventDefault();
     if (status !== "idle") return;
-    if (!lead.name.trim() || !lead.phone.trim()) return;
+    if (!lead.name.trim() || !lead.phone.trim() || !lead.ville.trim()) return;
     if (!telValide(lead.phone)) return setTelRefuse(lead.phone);
     setStatus("sending");
     console.log("[Simulateur] Demande :", {
-      urgent: service === "urgence",
       dossier,
       service,
       answers,
@@ -411,16 +465,6 @@ export default function Simulator({ open, onClose }) {
                 </Step>
               )}
 
-              {kind === "urgence" && (
-                <UrgenceScreen
-                  lead={lead}
-                  setLead={setLead}
-                  onSubmit={submitLead}
-                  status={status}
-                  phoneError={phoneError}
-                />
-              )}
-
               {kind === "form" && (
                 <Step n={step + 1} title="Votre projet est prêt. Où peut-on vous rappeler ?">
                   <div className="flex max-w-xl items-center gap-4 border-2 border-ink bg-ink p-3 text-paper shadow-hard-brand sm:p-4">
@@ -458,12 +502,12 @@ export default function Simulator({ open, onClose }) {
                       required
                     />
                     <SimField
-                      label="Email (facultatif)"
-                      type="email"
-                      value={lead.email}
-                      onChange={(v) => setLead((l) => ({ ...l, email: v }))}
-                      placeholder="jean@exemple.fr"
-                      autoComplete="email"
+                      label="Ville"
+                      value={lead.ville}
+                      onChange={(v) => setLead((l) => ({ ...l, ville: v }))}
+                      placeholder={config.villeProche}
+                      autoComplete="address-level2"
+                      required
                     />
                     <button type="submit" disabled={status !== "idle"} className="btn-main mt-2 self-start">
                       {status === "idle" ? "Réserver mon rappel gratuit" : "Envoi…"}
@@ -481,9 +525,7 @@ export default function Simulator({ open, onClose }) {
                 </Step>
               )}
 
-              {kind === "sent" && service === "urgence" && <UrgenceEnvoyee lead={lead} onClose={onClose} />}
-
-              {kind === "sent" && service !== "urgence" && (
+              {kind === "sent" && (
                 <div>
                   <div className="label inline-flex items-center gap-2 bg-brand px-3 py-1.5 text-brand-on">
                     <Check size={13} strokeWidth={3} /> Demande envoyée
@@ -585,9 +627,7 @@ function Options({ options, selected, flash, onPick, withIcons }) {
             className={`group flex items-center gap-3 border-2 px-3 py-3 text-left transition-all duration-150 sm:gap-4 sm:p-5 ${
               active
                 ? "border-ink bg-ink text-paper"
-                : opt.urgent
-                  ? "border-red-700/40 bg-red-50/60 hover:border-red-700"
-                  : "border-ink/20 bg-paper hover:border-ink hover:shadow-hard-sm"
+                : "border-ink/20 bg-paper hover:border-ink hover:shadow-hard-sm"
             }`}
           >
             <span
@@ -609,7 +649,7 @@ function Options({ options, selected, flash, onPick, withIcons }) {
               <Icon
                 size={24}
                 strokeWidth={1.8}
-                className={`shrink-0 ${active ? "text-brand-bright" : opt.urgent ? "text-red-700" : "text-ink/40"}`}
+                className={`shrink-0 ${active ? "text-brand-bright" : "text-ink/40"}`}
               />
             )}
           </button>
@@ -848,6 +888,8 @@ function trouverAvis(service) {
 
 function Reassurance({ service }) {
   const avis = trouverAvis(service);
+  // Marques de chaudières mises en avant pour les projets de chauffage
+  const marques = service === "chauffage" ? config.marques || [] : [];
   return (
     <div className="mt-10 max-w-xl">
       <ul className="flex flex-wrap gap-2">
@@ -860,6 +902,17 @@ function Reassurance({ service }) {
           </li>
         ))}
       </ul>
+      {marques.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+          <BadgeCheck size={18} strokeWidth={2.2} className="text-brand-text" />
+          <span className="text-ink/60">Marques installées :</span>
+          {marques.map((m) => (
+            <span key={m} className="border-2 border-ink px-2 py-0.5 font-display font-extrabold">
+              {m}
+            </span>
+          ))}
+        </div>
+      )}
       {avis && (
         <figure className="mt-6 border-l-4 border-brand bg-paper-2 p-4">
           <div className="flex flex-wrap items-center gap-2 text-sm font-semibold">
@@ -876,110 +929,6 @@ function Reassurance({ service }) {
           </figcaption>
         </figure>
       )}
-    </div>
-  );
-}
-
-/* Urgence : appel direct en priorité, ou « rappel express » si le client
-   ne peut pas appeler tout de suite (prénom + téléphone, rien d'autre). */
-function UrgenceScreen({ lead, setLead, onSubmit, status, phoneError }) {
-  return (
-    <div>
-      <div className="label inline-flex items-center gap-2 bg-red-700 px-3 py-1.5 text-white">
-        <Zap size={13} /> Urgence
-      </div>
-      <h2 className="h-display mt-4 text-[2.2rem] sm:mt-6 sm:text-6xl">
-        Une urgence ? Appelez {ARTISAN_PRENOM} directement.
-      </h2>
-      <p className="mt-5 hidden max-w-lg text-lg text-ink/70 sm:block">
-        Fuite, panne de chauffage, plus d'eau chaude : {ARTISAN_PRENOM} décroche en direct et
-        intervient au plus vite — {config.zoneIntervention}.
-      </p>
-      <a
-        href={`tel:${config.telLien}`}
-        className="group mt-6 flex items-center gap-4 border-2 border-ink bg-ink p-4 text-paper shadow-hard-brand transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5 sm:mt-10 sm:gap-5 sm:p-6"
-      >
-        <span className="grid h-12 w-12 shrink-0 place-items-center bg-red-700 text-white sm:h-16 sm:w-16">
-          <Phone size={24} strokeWidth={2.2} />
-        </span>
-        <span className="min-w-0">
-          <span className="label block text-[10px] text-paper/60">
-            Ligne directe
-            {config.urgence24h && (
-              <>
-                {" "}· 24 h/24<span className="hidden sm:inline"> · 7 j/7</span>
-              </>
-            )}
-          </span>
-          <span className="h-display mt-1 block whitespace-nowrap text-[1.9rem] sm:text-5xl">{config.tel}</span>
-        </span>
-      </a>
-
-      <div className="mt-6 border-t-2 border-dashed border-ink/30 pt-4 sm:mt-10 sm:pt-7">
-        <p className="font-display text-lg font-bold leading-tight">Impossible d'appeler maintenant ?</p>
-        <p className="mt-1 text-sm text-ink/60">
-          Laissez votre numéro : {ARTISAN_PRENOM} vous rappelle en priorité.
-        </p>
-        <form onSubmit={onSubmit} className="mt-4 grid grid-cols-2 items-end gap-x-3 gap-y-4 sm:grid-cols-[1fr_1fr_auto] sm:gap-5">
-          <SimField
-            label="Prénom"
-            value={lead.name}
-            onChange={(v) => setLead((l) => ({ ...l, name: v }))}
-            placeholder="Jean"
-            autoComplete="given-name"
-            required
-          />
-          <SimField
-            label="Téléphone"
-            type="tel"
-            value={lead.phone}
-            onChange={(v) => setLead((l) => ({ ...l, phone: v }))}
-            error={phoneError}
-            placeholder="06 12 34 56 78"
-            autoComplete="tel"
-            required
-          />
-          <button type="submit" disabled={status !== "idle"} className="btn-main col-span-2 justify-between sm:col-span-1">
-            {status === "idle" ? "Rappel express" : "Envoi…"}
-            <span className="btn-arrow">
-              {status === "idle" ? (
-                <ArrowUpRight size={22} strokeWidth={2.4} />
-              ) : (
-                <Loader2 size={20} className="animate-spin" />
-              )}
-            </span>
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-function UrgenceEnvoyee({ lead, onClose }) {
-  return (
-    <div>
-      <div className="label inline-flex items-center gap-2 bg-red-700 px-3 py-1.5 text-white">
-        <Check size={13} strokeWidth={3} /> Rappel express demandé
-      </div>
-      <h2 className="h-display mt-6 text-5xl sm:text-6xl">
-        C'est noté, {lead.name.trim().split(" ")[0] || "à très vite"} !
-      </h2>
-      <p className="mt-5 max-w-xl text-lg text-ink/70">
-        {ARTISAN_PRENOM} vous rappelle au plus vite au{" "}
-        <strong className="whitespace-nowrap text-ink">{lead.phone}</strong>. Gardez votre
-        téléphone à portée de main.
-      </p>
-      <div className="mt-8 max-w-xl border-l-4 border-red-700 bg-red-50/70 p-4 text-[15px] leading-relaxed">
-        <strong>En attendant :</strong> en cas de fuite, coupez l'arrivée d'eau générale (souvent
-        près du compteur). Si la situation s'aggrave, appelez directement le{" "}
-        <a href={`tel:${config.telLien}`} className="link-fill whitespace-nowrap font-semibold">
-          {config.tel}
-        </a>
-        .
-      </div>
-      <button type="button" onClick={onClose} className="btn-line mt-10">
-        Retour au site
-      </button>
     </div>
   );
 }
