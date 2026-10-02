@@ -80,6 +80,24 @@ export default function Hero({ onOpenSimulator }) {
     : config.heroVideoDesktop || config.heroVideoMobile;
   const metier = config.metierLignes.split("·")[0].trim();
 
+  // Lien d'appel : à côté du bouton sur ordinateur, sous la photo sur mobile
+  const appel = (
+    <a href={`tel:${config.telLien}`} className="group flex items-center gap-3">
+      <span className="grid h-14 w-14 place-items-center border-2 border-ink transition-colors group-hover:bg-ink group-hover:text-paper">
+        <Phone size={20} strokeWidth={2.2} />
+      </span>
+      <span className="flex flex-col">
+        <span className="label text-[10px] text-ink/55">Ou appelez directement</span>
+        <span
+          className="link-fill self-start font-display text-xl font-extrabold"
+          style={{ fontVariationSettings: '"wdth" 85' }}
+        >
+          {config.tel}
+        </span>
+      </span>
+    </a>
+  );
+
   return (
     <section id="top" className="relative" style={{ paddingTop: "var(--header-h)" }}>
       <div className="wrap grid gap-12 pb-16 pt-8 sm:pt-12 lg:grid-cols-12 lg:gap-10 lg:pb-24 lg:pt-14">
@@ -120,8 +138,14 @@ export default function Hero({ onOpenSimulator }) {
             </div>
           )}
 
+          {!isDesktop && (
+            <div className="fade-up order-3 mt-8" style={{ "--d": "480ms" }}>
+              {appel}
+            </div>
+          )}
+
           <p
-            className="fade-up order-3 mt-7 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl lg:order-none"
+            className="fade-up order-4 mt-7 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl lg:order-none"
             style={{ "--d": "420ms" }}
           >
             {config.hero_sous_titre}
@@ -137,24 +161,11 @@ export default function Hero({ onOpenSimulator }) {
                 <ArrowUpRight size={22} strokeWidth={2.4} />
               </span>
             </button>
-            <a href={`tel:${config.telLien}`} className="group flex items-center gap-3">
-              <span className="grid h-14 w-14 place-items-center border-2 border-ink transition-colors group-hover:bg-ink group-hover:text-paper">
-                <Phone size={20} strokeWidth={2.2} />
-              </span>
-              <span className="flex flex-col">
-                <span className="label text-[10px] text-ink/55">Ou appelez directement</span>
-                <span
-                  className="link-fill self-start font-display text-xl font-extrabold"
-                  style={{ fontVariationSettings: '"wdth" 85' }}
-                >
-                  {config.tel}
-                </span>
-              </span>
-            </a>
+            {isDesktop && appel}
           </div>
 
           <dl
-            className="fade-up order-4 mt-12 grid grid-cols-3 border-y-2 border-ink lg:order-none lg:mt-auto"
+            className="fade-up order-5 mt-12 grid grid-cols-3 border-y-2 border-ink lg:order-none lg:mt-auto"
             style={{ "--d": "680ms" }}
           >
             {FACTS.map((f, i) => {
