@@ -1,4 +1,4 @@
-import { ArrowUpRight, BadgeCheck } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { config } from "../config/artisan.js";
 import { ICONS } from "../lib/icons.jsx";
 
@@ -10,7 +10,7 @@ export default function Services({ onOpenSimulator }) {
       <div className="wrap">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <div data-reveal className="section-tag text-brand-text">(01) — Prestations</div>
+            <div data-reveal className="section-tag text-brand-text">Prestations</div>
             <h2 data-reveal className="h-section mt-5" style={{ "--d": "80ms" }}>
               Un seul artisan
               <br />
@@ -47,10 +47,10 @@ export default function Services({ onOpenSimulator }) {
                     </span>
                   </span>
                   <span className="col-span-2 col-start-2 row-start-2 text-[15px] leading-relaxed text-ink/65 transition-colors group-hover:text-paper/75 md:col-span-1 md:col-start-3 md:row-start-1">
-                    {s.desc}
-                    {/* Détail de la famille de prestations, en étiquettes */}
-                    {s.tags?.length > 0 && (
-                      <span className="mt-3 flex flex-wrap gap-1.5">
+                    {/* Détail de la famille de prestations, en étiquettes
+                        (le texte descriptif ne s'affiche que sans étiquettes) */}
+                    {s.tags?.length > 0 ? (
+                      <span className="flex flex-wrap gap-1.5">
                         {s.tags.map((t) => (
                           <span
                             key={t}
@@ -60,6 +60,8 @@ export default function Services({ onOpenSimulator }) {
                           </span>
                         ))}
                       </span>
+                    ) : (
+                      s.desc
                     )}
                   </span>
                   <span className="col-start-3 row-start-1 grid h-11 w-11 place-items-center border-2 border-current transition-all duration-300 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-brand-on md:col-start-4">
@@ -70,8 +72,6 @@ export default function Services({ onOpenSimulator }) {
             );
           })}
         </ul>
-
-        {config.marques?.length > 0 && <Marques />}
 
         <div data-reveal className="mt-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
           <p className="label text-ink/55">
@@ -86,32 +86,3 @@ export default function Services({ onOpenSimulator }) {
   );
 }
 
-/* Badge de réassurance : les marques de chaudières installées */
-function Marques() {
-  return (
-    <div
-      data-reveal
-      className="mt-10 flex flex-col gap-4 border-2 border-ink bg-paper-2 p-5 shadow-hard-sm sm:flex-row sm:items-center sm:gap-6 sm:p-6"
-    >
-      <span className="flex items-center gap-3">
-        <span className="grid h-11 w-11 shrink-0 place-items-center bg-brand text-brand-on">
-          <BadgeCheck size={22} strokeWidth={2.2} />
-        </span>
-        <span className="leading-tight">
-          <span className="label block text-[10px] text-ink/55">Marques de confiance</span>
-          <span className="font-display text-lg font-bold">Chaudières installées et entretenues</span>
-        </span>
-      </span>
-      <ul className="flex flex-wrap gap-2 sm:ml-auto sm:gap-3">
-        {config.marques.map((m) => (
-          <li
-            key={m}
-            className="border-2 border-ink bg-paper px-4 py-2 font-display text-xl font-extrabold tracking-tight sm:text-2xl"
-          >
-            {m}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}

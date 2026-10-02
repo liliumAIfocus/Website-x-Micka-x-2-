@@ -58,7 +58,7 @@ export default function Methode({ onOpenSimulator }) {
       <div className="wrap grid gap-14 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
           <div className="lg:sticky" style={{ top: "calc(var(--header-h) + 3rem)" }}>
-            <div data-reveal className="section-tag text-brand-text">(04) — La méthode</div>
+            <div data-reveal className="section-tag text-brand-text">La méthode</div>
             <h2 data-reveal className="h-section mt-5" style={{ "--d": "80ms" }}>
               Du premier appel à la dernière finition.
             </h2>

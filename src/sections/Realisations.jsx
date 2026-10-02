@@ -51,7 +51,7 @@ export default function Realisations({ onOpenSimulator }) {
       <div className="wrap lg:pt-[calc(var(--header-h)+2.5rem)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div data-reveal className="section-tag text-brand-bright">(02) — Réalisations</div>
+            <div data-reveal className="section-tag text-brand-bright">Réalisations</div>
             <h2 data-reveal className="h-section mt-5" style={{ "--d": "80ms" }}>
               Le travail, <span className="text-brand-bright">sur pièce.</span>
             </h2>

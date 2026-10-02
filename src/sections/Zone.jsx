@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import { config } from "../config/artisan.js";
 
 /* Carte « radar » de la zone d'intervention : la ville de référence au
@@ -92,9 +92,9 @@ export default function Zone() {
     <section id="engagements" className="relative border-y-2 border-ink bg-paper-2 py-20 lg:py-28">
       <div className="wrap grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-16">
         <div className="lg:col-span-6">
-          <div data-reveal className="section-tag text-brand-text">(05) — Engagements & zone</div>
+          <div data-reveal className="section-tag text-brand-text">Engagements & zone</div>
           <h2 data-reveal className="h-section mt-5" style={{ "--d": "80ms" }}>
-            Des engagements écrits, pas des promesses.
+            Vous êtes entre de bonnes mains.
           </h2>
           <ul className="mt-10 border-t-2 border-ink">
             {ENGAGEMENTS.map((title, i) => (
@@ -111,6 +111,24 @@ export default function Zone() {
               </li>
             ))}
           </ul>
+
+          {/* Marques de chaudières installées, en bulles */}
+          {config.marques?.length > 0 && (
+            <div data-reveal className="mt-8" style={{ "--d": "280ms" }}>
+              <div className="label text-[10px] text-ink/55">Marques de confiance installées</div>
+              <ul className="mt-3 flex flex-wrap gap-2.5">
+                {config.marques.map((m) => (
+                  <li
+                    key={m}
+                    className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-paper px-4 py-2 font-display text-lg font-bold leading-none shadow-hard-sm"
+                  >
+                    <Star size={16} className="text-brand" fill="currentColor" strokeWidth={0} />
+                    {m}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div data-reveal className="lg:col-span-6" style={{ "--d": "120ms" }}>

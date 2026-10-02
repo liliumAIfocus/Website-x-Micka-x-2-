@@ -56,7 +56,7 @@ export default function Contact() {
       <div className="wrap grid gap-14 lg:grid-cols-12 lg:gap-16">
         {/* Coordonnées */}
         <div className="lg:col-span-6">
-          <div data-reveal className="section-tag text-brand-bright">(07) — Contact</div>
+          <div data-reveal className="section-tag text-brand-bright">Contact</div>
           <h2 data-reveal className="h-section mt-5" style={{ "--d": "80ms" }}>
             Un projet, une urgence ? <span className="text-brand-bright">Parlons-en.</span>
           </h2>

@@ -32,10 +32,10 @@ const AMBIANCES = config.ambiances || {};
 // directement (bouton Appeler, fiche Google).
 // `avisMots` : mots-clés pour retrouver l'avis client le plus proche du service
 const SERVICES = [
-  { value: "plomberie", label: "Plomberie", hint: "Fuite, sanitaires, chauffe-eau", icon: Droplets, avisMots: ["plomberie", "fuite", "sanitaire", "débouchage"] },
-  { value: "chauffage", label: "Chauffage & énergie", hint: "Chaudière, chauffe-eau, radiateurs", icon: Flame, avisMots: ["chaudière", "chauffage", "chauffe-eau"] },
-  { value: "sdb", label: "Salle de bain", hint: "Création ou rénovation complète", icon: Bath, avisMots: ["salle de bain", "rénovation"] },
-  { value: "normes", label: "Mise aux normes", hint: "Électricité, gaz, ventilation", icon: ShieldCheck, avisMots: ["normes", "électri"] },
+  { value: "plomberie", label: "Plomberie", icon: Droplets, avisMots: ["plomberie", "fuite", "sanitaire", "débouchage"] },
+  { value: "chauffage", label: "Chauffage & énergie", icon: Flame, avisMots: ["chaudière", "chauffage", "chauffe-eau"] },
+  { value: "sdb", label: "Salle de bain", icon: Bath, avisMots: ["salle de bain", "rénovation"] },
+  { value: "normes", label: "Mise aux normes", icon: ShieldCheck, avisMots: ["normes", "électri"] },
 ];
 
 /* ---------- Questions par service ---------- */
@@ -49,12 +49,11 @@ const typeChauffeEau = (skip) => ({
   short: "Chauffe-eau",
   skip,
   title: "Quel type de chauffe-eau ?",
-  subtitle: "Pas sûr ? Choisissez « Je ne sais pas » — on regardera ensemble.",
   options: [
-    { value: "electrique", label: "Électrique", hint: "Ballon classique, le plus courant" },
-    { value: "thermo", label: "Thermodynamique", hint: "Consomme beaucoup moins d'électricité" },
-    { value: "extraplat", label: "Extra-plat", hint: "Gain de place : couloir, placard" },
-    { value: "nsp", label: "Je ne sais pas", hint: "On vous conseille au téléphone", recap: "À définir" },
+    { value: "electrique", label: "Électrique" },
+    { value: "thermo", label: "Thermodynamique" },
+    { value: "extraplat", label: "Extra-plat" },
+    { value: "nsp", label: "Je ne sais pas", recap: "À définir" },
   ],
 });
 
@@ -64,12 +63,11 @@ const FLOWS = {
       key: "travaux",
       short: "Besoin",
       title: "Quel est votre besoin ?",
-      subtitle: "On précisera juste après.",
       options: [
-        { value: "fuite", label: "Fuite / débouchage", hint: "Fuite, canalisation bouchée" },
-        { value: "sanitaire", label: "WC & robinetterie", hint: "Toilettes, douche, robinet" },
-        { value: "chauffeeau", label: "Chauffe-eau", hint: "Panne, remplacement, installation" },
-        { value: "installation", label: "Installation / rénovation", hint: "Neuf ou extension" },
+        { value: "fuite", label: "Fuite / débouchage" },
+        { value: "sanitaire", label: "WC & robinetterie" },
+        { value: "chauffeeau", label: "Chauffe-eau" },
+        { value: "installation", label: "Installation / rénovation" },
       ],
     },
     typeChauffeEau((answers) => answers.travaux !== "chauffeeau"),
@@ -77,7 +75,6 @@ const FLOWS = {
       key: "nature",
       short: "Nature",
       title: "De quoi s'agit-il ?",
-      subtitle: "Pour cadrer au mieux l'intervention.",
       options: [
         { value: "reparation", label: "Une réparation", recap: "Réparation" },
         { value: "remplacement", label: "Un remplacement", recap: "Remplacement" },
@@ -88,11 +85,10 @@ const FLOWS = {
       key: "delai",
       short: "Délai",
       title: "Pour quand ?",
-      subtitle: "Une urgence ? Le plus rapide reste d'appeler directement.",
       options: [
-        { value: "rapide", label: "Rapidement", hint: "Dans les prochains jours" },
+        { value: "rapide", label: "Rapidement" },
         { value: "mois", label: "Dans le mois" },
-        { value: "flexible", label: "Flexible", hint: "Quand vous pouvez" },
+        { value: "flexible", label: "Flexible" },
       ],
     },
   ],
@@ -101,10 +97,9 @@ const FLOWS = {
       key: "typeChauffage",
       short: "Équipement",
       title: "Quel équipement est concerné ?",
-      subtitle: "Si vous hésitez, choisissez « Autre » — on en parlera au téléphone.",
       options: [
-        { value: "chaudiere", label: "Chaudière gaz ou fioul", hint: "Frisquet, Saunier Duval…", recap: "Chaudière" },
-        { value: "chauffeeau", label: "Chauffe-eau", hint: "Électrique, thermodynamique, extra-plat" },
+        { value: "chaudiere", label: "Chaudière gaz ou fioul", recap: "Chaudière" },
+        { value: "chauffeeau", label: "Chauffe-eau" },
         { value: "electrique", label: "Radiateurs électriques" },
         { value: "autre", label: "Autre / je ne sais pas", recap: "À préciser" },
       ],
@@ -114,10 +109,9 @@ const FLOWS = {
       key: "intervention",
       short: "Intervention",
       title: "Quel type d'intervention ?",
-      subtitle: "On adapte le devis à ce dont vous avez besoin.",
       options: [
         { value: "nouvelle", label: "Nouvelle installation" },
-        { value: "remplacement", label: "Remplacement", hint: "Changer un appareil existant" },
+        { value: "remplacement", label: "Remplacement" },
         { value: "entretien", label: "Entretien annuel" },
         { value: "panne", label: "Panne / réparation" },
       ],
@@ -128,12 +122,11 @@ const FLOWS = {
       key: "type",
       short: "Travaux",
       title: "Que souhaitez-vous rénover ?",
-      subtitle: "Choisissez ce qui correspond le mieux — on affinera ensemble.",
       options: [
-        { value: "toilette", label: "Toilettes", hint: "WC et sanitaires" },
-        { value: "douche", label: "Douche / baignoire", hint: "Espace bain" },
-        { value: "complete", label: "Rénovation complète", hint: "Toute la pièce" },
-        { value: "adefinir", label: "À définir ensemble", hint: "On en parle au rendez-vous" },
+        { value: "toilette", label: "Toilettes" },
+        { value: "douche", label: "Douche / baignoire" },
+        { value: "complete", label: "Rénovation complète" },
+        { value: "adefinir", label: "À définir ensemble" },
       ],
     },
     {
@@ -141,25 +134,23 @@ const FLOWS = {
       short: "Surface",
       skip: (answers) => answers.type === "toilette", // inutile pour des WC
       title: "Quelle est la taille de la pièce ?",
-      subtitle: "Une estimation suffit — on mesurera lors de la visite.",
       options: [
-        { value: "s", label: "Petite", hint: "Moins de 4 m²", recap: "Moins de 4 m²" },
-        { value: "m", label: "Moyenne", hint: "4 à 8 m²", recap: "4 à 8 m²" },
-        { value: "l", label: "Grande", hint: "Plus de 8 m²", recap: "Plus de 8 m²" },
+        { value: "s", label: "Petite", recap: "Moins de 4 m²" },
+        { value: "m", label: "Moyenne", recap: "4 à 8 m²" },
+        { value: "l", label: "Grande", recap: "Plus de 8 m²" },
       ],
     },
     {
       key: "style",
       short: "Style",
       title: "Quel style vous attire ?",
-      subtitle: "Vous pourrez tout ajuster lors du rendez-vous.",
       // Photos : config.ambiances.sdb, ou .toilettes si « Toilettes » est choisi
       photos: true,
       options: [
-        { value: "scandinave", label: "Scandinave", hint: "Clair, doux, chaleureux" },
-        { value: "mediterraneen", label: "Méditerranéen", hint: "Solaire, authentique" },
-        { value: "moderne", label: "Moderne", hint: "Épuré, actuel, élégant" },
-        { value: "autre", label: "Autre / j'hésite", hint: "On en parle ensemble au rendez-vous", recap: "À définir ensemble" },
+        { value: "scandinave", label: "Scandinave" },
+        { value: "mediterraneen", label: "Méditerranéen" },
+        { value: "moderne", label: "Moderne" },
+        { value: "autre", label: "Autre / j'hésite", recap: "À définir ensemble" },
       ],
     },
   ],
@@ -168,31 +159,28 @@ const FLOWS = {
       key: "domaine",
       short: "Domaine",
       title: "Qu'est-ce qui doit être mis aux normes ?",
-      subtitle: "Si vous ne savez pas, on fait le point ensemble.",
       options: [
-        { value: "electricite", label: "Électricité", hint: "Tableau, prises, circuits" },
-        { value: "gaz", label: "Gaz", hint: "Installation et raccordements" },
-        { value: "ventilation", label: "Ventilation / VMC", hint: "Aération du logement" },
-        { value: "diagnostic", label: "Je ne sais pas", hint: "Un diagnostic sur place", recap: "Diagnostic à faire" },
+        { value: "electricite", label: "Électricité" },
+        { value: "gaz", label: "Gaz" },
+        { value: "ventilation", label: "Ventilation / VMC" },
+        { value: "diagnostic", label: "Je ne sais pas", recap: "Diagnostic à faire" },
       ],
     },
     {
       key: "contexte",
       short: "Contexte",
       title: "Dans quel cadre ?",
-      subtitle: "Pour savoir ce qui est attendu exactement.",
       options: [
-        { value: "vente", label: "Vente ou location", hint: "Suite à un diagnostic immobilier", recap: "Vente / location" },
-        { value: "achat", label: "Achat ou rénovation", hint: "Logement ancien à remettre à niveau", recap: "Achat / rénovation" },
+        { value: "vente", label: "Vente ou location", recap: "Vente / location" },
+        { value: "achat", label: "Achat ou rénovation", recap: "Achat / rénovation" },
         { value: "assurance", label: "Demande de l'assurance", recap: "Assurance" },
-        { value: "securite", label: "Pour ma sécurité", hint: "Installation vieillissante", recap: "Sécurité" },
+        { value: "securite", label: "Pour ma sécurité", recap: "Sécurité" },
       ],
     },
     {
       key: "logement",
       short: "Logement",
       title: "Quel type de logement ?",
-      subtitle: "On prévoit l'intervention en conséquence.",
       options: [
         { value: "maison", label: "Maison" },
         { value: "appartement", label: "Appartement" },
@@ -449,13 +437,13 @@ export default function Simulator({ open, initialService, onClose }) {
           >
             <div key={`${kind}-${step}`} className={dir === 1 ? "step-next" : "step-prev"}>
               {kind === "service" && (
-                <Step n={1} title="Quel type de projet avez-vous ?" subtitle="Choisissez le service qui correspond à votre besoin.">
+                <Step n={1} title="Quel type de projet avez-vous ?">
                   <Options options={SERVICES} flash={flash} onPick={pick} withIcons />
                 </Step>
               )}
 
               {question && (
-                <Step n={step + 1} title={question.title} subtitle={question.subtitle}>
+                <Step n={step + 1} title={question.title}>
                   <Options
                     options={questionOptions}
                     selected={answers[question.key]}
@@ -597,14 +585,13 @@ function Kbd({ children }) {
   );
 }
 
-function Step({ n, title, subtitle, children }) {
+function Step({ n, title, children }) {
   return (
     <div>
       <div className="label flex items-center gap-2 text-brand-text">
         {String(n).padStart(2, "0")} <ArrowRight size={14} />
       </div>
       <h2 className="h-display mt-2 text-[2rem] sm:mt-4 sm:text-5xl">{title}</h2>
-      {subtitle && <p className="mt-2 max-w-xl text-ink/65 sm:mt-4 sm:text-lg">{subtitle}</p>}
       <div className="mt-5 sm:mt-10">{children}</div>
     </div>
   );
@@ -639,11 +626,6 @@ function Options({ options, selected, flash, onPick, withIcons }) {
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-display text-[17px] font-bold leading-tight sm:text-lg">{opt.label}</span>
-              {opt.hint && (
-                <span className={`mt-0.5 block text-[13px] sm:mt-1 sm:text-sm ${active ? "text-paper/70" : "text-ink/60"}`}>
-                  {opt.hint}
-                </span>
-              )}
             </span>
             {Icon && (
               <Icon
@@ -699,9 +681,6 @@ function PhotoOptions({ options, selected, flash, onPick }) {
               />
               <span className="p-2.5 sm:p-3">
                 <span className="block font-display text-base font-bold leading-tight">{opt.label}</span>
-                {opt.hint && (
-                  <span className={`mt-0.5 block text-xs ${active ? "text-paper/70" : "text-ink/60"}`}>{opt.hint}</span>
-                )}
               </span>
             </button>
           );
@@ -723,7 +702,6 @@ function PhotoOptions({ options, selected, flash, onPick }) {
             {key}
             <span className="absolute inset-x-0 bottom-0 p-2.5 text-paper sm:p-3">
               <span className="block font-display text-base font-bold leading-tight">{opt.label}</span>
-              {opt.hint && <span className="mt-0.5 hidden text-xs text-paper/75 sm:block">{opt.hint}</span>}
             </span>
           </button>
         );

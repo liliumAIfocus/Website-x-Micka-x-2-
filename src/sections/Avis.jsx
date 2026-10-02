@@ -36,7 +36,7 @@ export default function Avis() {
       <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-12">
         {/* Note globale */}
         <div className="lg:col-span-4">
-          <div data-reveal className="section-tag text-brand-text">(06) — Avis clients</div>
+          <div data-reveal className="section-tag text-brand-text">Avis clients</div>
           <div data-reveal className="mt-8 border-2 border-ink bg-paper shadow-hard" style={{ "--d": "80ms" }}>
             <div className="flex items-center gap-2 border-b-2 border-ink px-5 py-3">
               <GoogleG size={18} />
