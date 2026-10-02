@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { config } from "../config/artisan.js";
-import { MARK, TEXTE } from "./logoPaths.js";
+import { MARK } from "./logoPaths.js";
 
 /* Logo MG Works en vectoriel : il prend la couleur du texte autour
    (currentColor), donc marine sur fond clair et blanc sur fond sombre. */
@@ -34,7 +34,9 @@ export default function Logo({ dark = true, sub = true, onClick }) {
     >
       <Trace trace={MARK} height={30} />
       <span className={`flex flex-col border-l pl-3 ${dark ? "border-ink/25" : "border-paper/30"}`}>
-        <Trace trace={TEXTE} height={11} />
+        <span className="font-display text-lg font-extrabold uppercase leading-none tracking-wide">
+          {config.nomEntreprise}
+        </span>
         {sub && (
           <span className={`label mt-1.5 hidden text-[10px] sm:block ${dark ? "text-ink/55" : "text-paper/55"}`}>
             Artisan · {config.ville}
