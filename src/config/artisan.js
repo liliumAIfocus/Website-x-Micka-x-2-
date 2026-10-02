@@ -77,18 +77,18 @@ export const config = {
   },
 
   // ========================= PHOTOS =========================
-  hero: chantier1,
+  hero: chantier2,
   // Mobile : la photo est affichée en format plus large que haut sous le
-  // titre ; on garde le haut de la pièce (douche, miroir, meuble).
-  heroPositionMobile: "center 25%",
-  heroLegende: "Salle de bain rénovée : douche à l'italienne, meuble vasque suspendu noir mat et colonne",
+  // titre ; on cadre plus bas pour garder la douche et la baignoire.
+  heroPositionMobile: "center 72%",
+  heroLegende: "Salle de bain rénovée : douche à l'italienne et baignoire balnéo habillage bois",
   portrait: portraitArtisan,
   portraitPosition: "center 22%",
   chantiers: [
     { src: chantier6, alt: "Salle de bain douce — douche à l'italienne et grand meuble" },
     { src: chantier3, alt: "Meuble vasque noir, miroir rond rétroéclairé et robinetterie dorée" },
     { src: chantier4, alt: "Cabine de douche noire, vasque dorée et carrelage marbré" },
-    { src: chantier2, alt: "Douche à l'italienne et baignoire balnéo habillage bois" },
+    { src: chantier1, alt: "Douche à l'italienne, meuble vasque suspendu noir mat et colonne" },
     // (chantier5 retiré : photo trop petite, 480 × 640)
     { src: chantier7, alt: "Chauffe-eau Atlantic posé au mur, raccordements cuivre soignés" },
   ],

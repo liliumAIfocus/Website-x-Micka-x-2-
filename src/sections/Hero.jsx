@@ -102,7 +102,7 @@ export default function Hero({ onOpenSimulator }) {
           </h1>
 
           {!isDesktop && (
-            <div className="relative mt-7 pb-3 pr-3 sm:max-w-[560px]">
+            <div className="relative order-2 mt-7 pb-3 pr-3 sm:max-w-[560px]">
               <div
                 className="wipe-in absolute bottom-0 right-0 h-[calc(100%-12px)] w-[calc(100%-12px)] bg-brand"
                 style={{ "--d": "400ms" }}
@@ -121,7 +121,7 @@ export default function Hero({ onOpenSimulator }) {
           )}
 
           <p
-            className="fade-up order-2 mt-7 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl lg:order-none"
+            className="fade-up order-3 mt-7 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl lg:order-none"
             style={{ "--d": "420ms" }}
           >
             {config.hero_sous_titre}
@@ -154,7 +154,7 @@ export default function Hero({ onOpenSimulator }) {
           </div>
 
           <dl
-            className="fade-up order-3 mt-12 grid grid-cols-3 border-y-2 border-ink lg:order-none lg:mt-auto"
+            className="fade-up order-4 mt-12 grid grid-cols-3 border-y-2 border-ink lg:order-none lg:mt-auto"
             style={{ "--d": "680ms" }}
           >
             {FACTS.map((f, i) => {

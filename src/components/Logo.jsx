@@ -24,7 +24,9 @@ export function Monogram({ size = 44, dark = true }) {
   return <Trace trace={MARK} height={size * 0.6} className={dark ? "text-ink" : "text-paper"} />;
 }
 
-export default function Logo({ dark = true, sub = true, onClick }) {
+// `compact` : dans l'en-tête, la ligne « Artisan · ville » est masquée quand
+// le menu complet s'affiche (xl), pour laisser la place, et revient en 2xl.
+export default function Logo({ dark = true, sub = true, compact = false, onClick }) {
   return (
     <Link
       to="/"
@@ -38,7 +40,7 @@ export default function Logo({ dark = true, sub = true, onClick }) {
           {config.nomEntreprise}
         </span>
         {sub && (
-          <span className={`label mt-1.5 hidden text-[10px] sm:block ${dark ? "text-ink/55" : "text-paper/55"}`}>
+          <span className={`label mt-1.5 hidden whitespace-nowrap text-[10px] sm:block ${compact ? "xl:hidden 2xl:block" : ""} ${dark ? "text-ink/55" : "text-paper/55"}`}>
             Artisan · {config.ville}
           </span>
         )}

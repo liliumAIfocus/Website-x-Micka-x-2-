@@ -20,7 +20,6 @@ function Stat({ s, i }) {
 }
 
 export default function Artisan() {
-  const prenom = config.nomGerant.split(" ")[0];
   return (
     <section id="artisan" className="relative border-y-2 border-ink bg-paper-2 py-20 lg:py-28">
       <div className="wrap grid gap-14 lg:grid-cols-12 lg:gap-12">
@@ -49,19 +48,11 @@ export default function Artisan() {
 
         {/* Texte */}
         <div className="flex flex-col lg:col-span-7 lg:pt-14">
-          <blockquote data-reveal className="relative mt-8" style={{ "--d": "80ms" }}>
-            <span
-              aria-hidden="true"
-              className="h-display absolute -left-1 -top-10 text-[7rem] leading-none text-brand sm:-left-3"
-            >
-              “
-            </span>
-            <p className="relative font-display text-[1.75rem] font-bold leading-[1.15] tracking-tight sm:text-[2.35rem] lg:text-[2.7rem]">
-              {config.citation}
-            </p>
-            <footer className="label mt-6 text-ink/60">— {prenom}, fondateur de {config.nomEntreprise}</footer>
-          </blockquote>
-          <p data-reveal className="mt-8 max-w-2xl text-lg leading-relaxed text-ink/70" style={{ "--d": "140ms" }}>
+          <p
+            data-reveal
+            className="mt-8 max-w-2xl font-display text-[1.6rem] font-bold leading-[1.2] tracking-tight sm:text-[2rem]"
+            style={{ "--d": "80ms" }}
+          >
             {config.presentation}
           </p>
 

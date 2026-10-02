@@ -42,7 +42,7 @@ export default function Header({ onOpenSimulator }) {
         style={{ height: "var(--header-h)" }}
       >
         <div className="wrap flex h-full items-center justify-between gap-6">
-          <Logo />
+          <Logo compact />
 
           <nav className="hidden items-center gap-7 xl:flex" aria-label="Navigation principale">
             {NAV_LINKS.slice(0, 5).map((l) => (
